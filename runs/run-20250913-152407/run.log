@@ -1,0 +1,18 @@
+[2025-09-13 15:24:07][INFO] ==== Max-Stable CNF server run ====
+[2025-09-13 15:24:07][INFO] Args: {'methods': 'raw,data_score,pairwise_grouped,combined_grouped', 'n_samples': 50000, 'seed': 42, 'outdir': 'runs', 'posterior_n': 1000, 'save_train_data': False, 'pair_groups': 2}
+[2025-09-13 15:24:07][INFO] Preparing data...
+[2025-09-13 19:32:17][INFO] Data prepared in 14889.86s; theta_train=(50000, 10)
+[2025-09-13 19:32:18][INFO] [raw] Start training: x=(50000, 3713), theta=(50000, 10), dim_data=3713, max_iters=1000
+[2025-09-13 21:15:20][INFO] [raw] Training done in 6181.96s
+[2025-09-13 21:15:20][INFO] [data_score] Start training: x=(50000, 10), theta=(50000, 10), dim_data=10, max_iters=1000
+[2025-09-14 07:58:14][INFO] [data_score] Training done in 38573.52s
+[2025-09-14 07:58:14][INFO] [pairwise_grouped] Start training: x=(50000, 20), theta=(50000, 10), dim_data=20, max_iters=1000
+[2025-09-14 09:15:15][INFO] [pairwise_grouped] Training done in 4620.77s
+[2025-09-14 09:15:15][INFO] [combined_grouped] Start training: x=(50000, 30), theta=(50000, 10), dim_data=30, max_iters=1000
+[2025-09-14 10:09:02][INFO] [combined_grouped] Training done in 3227.39s
+[2025-09-14 10:09:02][INFO] Building CNFs and sampling posteriors...
+[2025-09-14 10:09:05][INFO] [raw] Saved posterior samples (1000, 10)
+[2025-09-14 10:09:07][INFO] [data_score] Saved posterior samples (1000, 10)
+[2025-09-14 10:09:09][INFO] [pairwise_grouped] Saved posterior samples (1000, 10)
+[2025-09-14 10:09:11][INFO] [combined_grouped] Saved posterior samples (1000, 10)
+[2025-09-14 10:09:11][INFO] Run complete. Artifacts saved in: runs/run-20250913-152407

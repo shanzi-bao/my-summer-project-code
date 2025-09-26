@@ -1,0 +1,18 @@
+{
+  "method": "pairwise_grouped",
+  "dim_data": 20,
+  "duration_sec": 4620.771553039551,
+  "optim": {
+    "max_iters": 1000,
+    "batch_size": 256,
+    "lr": 0.0001
+  },
+  "sde": {
+    "name": "vpsde",
+    "T": 1.0,
+    "beta_min": 0.01,
+    "beta_max": 10.0,
+    "sigma_min": 0.01,
+    "sigma_max": 3.0
+  }
+}

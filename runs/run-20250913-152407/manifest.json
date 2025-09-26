@@ -1,0 +1,51 @@
+{
+  "methods": [
+    "raw",
+    "data_score",
+    "pairwise_grouped",
+    "combined_grouped"
+  ],
+  "seed": 42,
+  "n_train_samples": 50000,
+  "prep_seconds": 14889.864790916443,
+  "posterior_n": 1000,
+  "pair_groups": 2,
+  "artifacts": {
+    "raw": {
+      "model": "raw/model.eqx",
+      "ds_mean": "raw/ds_mean.npy",
+      "ds_std": "raw/ds_std.npy",
+      "posterior_samples": "results/raw_posterior_samples.npy",
+      "posterior_summary": "results/raw_posterior_summary.json",
+      "dim_data": 3713,
+      "train_time_sec": 6181.957539796829
+    },
+    "data_score": {
+      "model": "data_score/model.eqx",
+      "ds_mean": "data_score/ds_mean.npy",
+      "ds_std": "data_score/ds_std.npy",
+      "posterior_samples": "results/data_score_posterior_samples.npy",
+      "posterior_summary": "results/data_score_posterior_summary.json",
+      "dim_data": 10,
+      "train_time_sec": 38573.515910863876
+    },
+    "pairwise_grouped": {
+      "model": "pairwise_grouped/model.eqx",
+      "ds_mean": "pairwise_grouped/ds_mean.npy",
+      "ds_std": "pairwise_grouped/ds_std.npy",
+      "posterior_samples": "results/pairwise_grouped_posterior_samples.npy",
+      "posterior_summary": "results/pairwise_grouped_posterior_summary.json",
+      "dim_data": 20,
+      "train_time_sec": 4620.771553039551
+    },
+    "combined_grouped": {
+      "model": "combined_grouped/model.eqx",
+      "ds_mean": "combined_grouped/ds_mean.npy",
+      "ds_std": "combined_grouped/ds_std.npy",
+      "posterior_samples": "results/combined_grouped_posterior_samples.npy",
+      "posterior_summary": "results/combined_grouped_posterior_summary.json",
+      "dim_data": 30,
+      "train_time_sec": 3227.385763168335
+    }
+  }
+}

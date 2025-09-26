@@ -6,7 +6,7 @@ import functools as ft
 import optax
 import math
 from copy import deepcopy
-# 在 train.py 顶部添加
+
 from config import create_range_parameter_config
 from sde import get_sde, VPSDE
 from nn_model import NCMLP
@@ -150,22 +150,3 @@ def dataloader(data, batch_size, *, key):
         yield data[batch_perm]
         start = end
 
-        # 使用训练函数
-# key = jr.PRNGKey(42)
-# config = create_range_parameter_config()
-# sde = get_sde(config)
-# model = NCMLP(key, config)
-# # 生成训练数据
-# n_samples = 5000
-# key = jr.PRNGKey(42)
-
-# theta_train = your_prior_sampler(n_samples, key)
-# key, *sim_keys = jr.split(key, n_samples + 1)
-# x_train = jnp.array([your_simulator(theta_train[i], sim_keys[i]) for i in range(n_samples)])
-
-
-
-# # 训练
-# trained_model, ds_mean, ds_std = train_score_network(
-#     config, model, sde, theta_train, x_train, key
-# )

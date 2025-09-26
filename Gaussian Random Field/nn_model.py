@@ -13,14 +13,14 @@ class NCMLP(eqx.Module):
     def __init__(self, key, config):
         key1, key2, key3 = jr.split(key, 3)
         self.mlp_theta = eqx.nn.MLP(
-            in_size = config.algorithm.dim_parameters,  # 修改这里
+            in_size = config.algorithm.dim_parameters,  
             out_size = config.score_network.theta_embed_dim, 
             depth = config.score_network.depth,
             width_size = config.score_network.width,
             activation = config.score_network.activation,
             key = key1)
         self.mlp_x = eqx.nn.MLP(
-            in_size = config.algorithm.dim_data,  # 修改这里
+            in_size = config.algorithm.dim_data,  
             out_size = config.score_network.x_embed_dim, 
             depth = config.score_network.depth,
             width_size = config.score_network.width,
@@ -28,7 +28,7 @@ class NCMLP(eqx.Module):
             key = key2)
         self.mlp_main = eqx.nn.MLP(
             in_size = config.score_network.theta_embed_dim + config.score_network.x_embed_dim + config.score_network.t_embed_dim,
-            out_size = config.algorithm.dim_parameters,  # 修改这里
+            out_size = config.algorithm.dim_parameters,  
             depth = config.score_network.depth,
             width_size = config.score_network.width,
             activation = config.score_network.activation,

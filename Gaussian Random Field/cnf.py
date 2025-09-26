@@ -1,4 +1,4 @@
-# cnf.py - 基于你的代码适配的CNF推断模块
+# cnf.py - CNF inference module adapted based on your code
 from nn_model import NCMLP
 from sde import SDE
 import math
@@ -36,7 +36,7 @@ class CNF(eqx.Module):
         self.t0 = 1e-5
         self.dt = 0.01
 
-        # 分离参数和数据的标准化参数
+        # Separate normalization parameters for parameters and data
         split_indices = [self.sde.dim_parameters, self.sde.dim_parameters + self.sde.dim_data]
         parameter_mean, data_mean, _ = jnp.split(ds_means, indices_or_sections=split_indices)
         parameter_std, data_std, _ = jnp.split(ds_stds, indices_or_sections=split_indices)
@@ -48,36 +48,36 @@ class CNF(eqx.Module):
 
     @eqx.filter_jit
     def batch_sample_fn(self, sample_size, x, key):
-        """批量后验采样"""
-        # 标准化观测数据
+        """Batch posterior sampling"""
+        # Standardize observed data
         x = (x - self.data_mean) / self.data_std
         
-        # 为每个样本生成不同的随机种子
+        # Generate different random seeds for each sample
         sample_keys = jr.split(key, sample_size)
         
-        # 创建单样本函数的偏函数
+        # Create partial function for single sample function
         sample_fn = ft.partial(self.single_sample_fn, self.score_network, self.sde, x)
         
-        # 批量采样
+        # Batch sampling
         samples = jax.vmap(sample_fn)(sample_keys)
         
-        # 反标准化回原始尺度
+        # Denormalize back to original scale
         samples = self.parameter_mean + self.parameter_std * samples
         return samples
 
     @eqx.filter_jit
     def single_sample_fn(self, score_network, sde, x, key, epsilon=1e-5, dt=0.01):
-        """单个后验样本采样 - 反向ODE"""
+        """Single posterior sample sampling - reverse ODE"""
         key, base_dist_key = jr.split(key)
 
-        # 定义漂移函数
+        # Define drift function
         drift = ft.partial(sde.drift_ode, score_network, x)
         term = dfx.ODETerm(drift)
 
-        # 从先验噪声开始
+        # Start from prior noise
         init_theta = sde.base_dist(base_dist_key).reshape(-1,)
 
-        # 求解反向ODE：从t=T积分到t=epsilon
+        # Solve reverse ODE: integrate from t=T to t=epsilon
         solver = dfx.Tsit5()
         sol = dfx.diffeqsolve(term, solver, sde.T, epsilon, -dt, init_theta)
         
@@ -85,12 +85,12 @@ class CNF(eqx.Module):
 
     @eqx.filter_jit
     def batch_logp_fn(self, theta, x, key):
-        """批量对数概率计算"""
-        # 标准化
+        """Batch log probability calculation"""
+        # Standardization
         x = (x - self.data_mean) / self.data_std
         theta = (theta - self.parameter_mean) / self.parameter_std
         
-        # 批量计算
+        # Batch computation
         logp_keys = jr.split(key, theta.shape[0])
         logp_fn = ft.partial(self.single_logp_fn, self.score_network, self.sde, x)
         logps = jax.vmap(logp_fn)(theta, logp_keys)
@@ -98,21 +98,21 @@ class CNF(eqx.Module):
 
     @eqx.filter_jit
     def single_logp_fn(self, score_network, sde, x, theta, key):
-        """单个样本的对数概率计算 - 前向ODE"""
-        # 定义包含Jacobian的漂移函数
+        """Single sample log probability calculation - forward ODE"""
+        # Define drift function with Jacobian
         term = ft.partial(sde.drift_dlogp_ode, score_network, x)
         term = dfx.ODETerm(term)
 
-        # 初始状态：(theta, log_det_jacobian)
+        # Initial state: (theta, log_det_jacobian)
         delta_log_likelihood = 0.0
         theta_state = (theta, delta_log_likelihood)
 
-        # 前向ODE：从t=0积分到t=T
+        # Forward ODE: integrate from t=0 to t=T
         solver = dfx.Tsit5()
         sol = dfx.diffeqsolve(term, solver, self.t0, self.t1, self.dt, theta_state)
         
-        # 提取最终状态
+        # Extract final state
         (y,), (delta_log_likelihood,) = sol.ys
         
-        # 计算对数概率：变量变换 + 基础分布概率
+        # Calculate log probability: change of variables + base distribution probability
         return delta_log_likelihood + sde.base_dist_logp(y)

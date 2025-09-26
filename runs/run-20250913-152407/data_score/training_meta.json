@@ -1,0 +1,18 @@
+{
+  "method": "data_score",
+  "dim_data": 10,
+  "duration_sec": 38573.515910863876,
+  "optim": {
+    "max_iters": 1000,
+    "batch_size": 256,
+    "lr": 0.0001
+  },
+  "sde": {
+    "name": "vpsde",
+    "T": 1.0,
+    "beta_min": 0.01,
+    "beta_max": 10.0,
+    "sigma_min": 0.01,
+    "sigma_max": 3.0
+  }
+}
